@@ -1,0 +1,11 @@
+# West workspace (created by `west init -l app && west update`)
+.west/
+zephyr/
+modules/
+bootloader/
+tools/
+
+# Build outputs
+build/
+twister-out*/
+compile_commands.json

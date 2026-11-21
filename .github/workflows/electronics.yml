@@ -1,0 +1,41 @@
+name: Electronics
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  kicad:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Export schematic and board file names
+        id: file-names
+        run: |
+          echo "schematic_file=$(find electronics -type f -name "*.kicad_sch" | head -n 1)" >> $GITHUB_OUTPUT
+          echo "pcb_file=$(find electronics -type f -name "*.kicad_pcb" | head -n 1)" >> $GITHUB_OUTPUT
+      - name: Debug file names
+        run: |
+          echo "schematic_file=${{ steps.file-names.outputs.schematic_file }}"
+          echo "pcb_file=${{ steps.file-names.outputs.pcb_file }}"
+      - name: Run KiCad actions
+        uses: actions-for-kicad/kicad-actions@d51e6623d9465cf5d95958b3a9f651aa9702a317 # v1-k9.0
+        with:
+          schematic_file_name: "${{ steps.file-names.outputs.schematic_file }}"
+          pcb_file_name: "${{ steps.file-names.outputs.pcb_file }}"
+          run_erc: false
+          schematic_output_pdf: true
+          run_drc: false
+          pcb_output_gerbers_and_drill: true
+          pcb_output_image: true
+      - name: Zip Gerbers for fabrication
+        run: (cd gerbers && zip -r ../gerbers.zip .)
+      - name: Upload KiCad artifacts
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: electronics-artifacts
+          path: |
+            ./schematic.pdf
+            ./gerbers.zip
+            ./pcb.png

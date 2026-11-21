@@ -1,0 +1,20 @@
+# West manifest for the HAST chamber firmware (application as manifest repository).
+# Initialize the workspace from firmware/: `west init -l app && west update`
+manifest:
+  remotes:
+    - name: zephyrproject-rtos
+      url-base: https://github.com/zephyrproject-rtos
+
+  projects:
+    - name: zephyr
+      remote: zephyrproject-rtos
+      revision: v4.5.0
+      import:
+        # Only fetch the modules needed by the ESP32-S3; extend when adding features.
+        name-allowlist:
+          - hal_espressif
+          - mbedtls
+          - mcuboot
+
+  self:
+    path: app

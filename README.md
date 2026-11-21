@@ -1,20 +1,29 @@
-# Template-for-Kicad-JLCPCB-Projects
+# HAST chamber
 
-Template repository based on the great work of https://github.com/labtroll/KiCad-DesignRules.  
-Please feel free to open a PR for improving this template.
+Open hardware Highly Accelerated Stress Test (HAST) chamber.
 
-## Enforce DRC and ERC checks in CI
+## Repository layout
 
-If you want to enforce DRC and ERC checks in CI, enable `run_erc` and `run_drc` to `true`.
+| Folder                          | Component                        | Tooling    |
+|---------------------------------|----------------------------------|------------|
+| [`cad/`](cad/)                  | Mechanical design                | FreeCAD    |
+| [`electronics/`](electronics/)  | Schematic and PCB                | KiCad 9    |
+| [`firmware/`](firmware/)        | Controller firmware (ESP32-S3)   | Zephyr RTOS |
 
-```yaml
-uses: actions-for-kicad/kicad-actions@d51e6623d9465cf5d95958b3a9f651aa9702a317 # v1-k9.0
-with:
-  schematic_file_name: "${{ steps.file-names.outputs.schematic_file }}"
-  pcb_file_name: "${{ steps.file-names.outputs.pcb_file }}"
-  run_erc: true
-  schematic_output_pdf: true
-  run_drc: true
-  pcb_output_gerbers_and_drill: true
-  pcb_output_image: true
-```
+Each folder has its own README with details on its contents and workflow.
+
+## CI/CD
+
+| Workflow                 | Purpose                                                  |
+|--------------------------|----------------------------------------------------------|
+| `dispatcher.yml`         | Entry point; avoids duplicate runs on internal PRs       |
+| `check-and-release.yml`  | Runs the component pipelines, then releases on `master`  |
+| `electronics.yml`        | KiCad exports (schematic PDF, Gerbers, PCB render)       |
+| `firmware.yml`           | Zephyr build + Twister tests (skipped until set up)     |
+
+Every push to `master` creates a release tagged `vYYYY.MM.DD-<sha>` with the
+electronics outputs and, once available, the firmware binaries.
+
+## License
+
+[Apache-2.0](LICENSE)
