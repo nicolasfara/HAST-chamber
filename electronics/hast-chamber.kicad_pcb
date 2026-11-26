@@ -8,10 +8,14 @@
 	)
 	(paper "A4" portrait)
 	(title_block
-		(title "JLCPCB Custom Design Rules (.kicad_dru)")
-		(date "2023-10-19")
-		(company "LabTroll")
-		(comment 1 "Author: Morten Hattesen")
+		(title "HAST Chamber Controller")
+		(date "2026-11-26")
+		(rev "0.1")
+		(company "HAST-chamber Open Hardware")
+		(comment 1 "PCB - 4 layers, 1.6 mm FR-4, JLCPCB design rules")
+		(comment 2 "Designer: Nicolas Farabegoli")
+		(comment 3 "License: Apache-2.0 - github.com/nicolasfara/HAST-chamber")
+		(comment 4 "Status: DRAFT - not released for production")
 	)
 	(layers
 		(0 "F.Cu" signal)
